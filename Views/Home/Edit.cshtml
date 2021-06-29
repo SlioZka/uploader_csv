@@ -1,0 +1,58 @@
+﻿@model testBits.Models.CSV
+@{ 
+    var name = ViewBag.username;
+    var day = ViewBag.dateDay;
+    var month = ViewBag.dateMonth;
+    var year = ViewBag.dateYear;
+    var married = ViewBag.married;
+    var phone = ViewBag.phone;
+    var salary = ViewBag.salary;
+}
+<title>Редагування</title>
+
+<h3>Редагування інформації</h3>
+
+<div>
+    <form method="post">
+        <table>
+            <tr>
+                <td>Ім'я</td>
+                <td><input type="text" name="Name" value="@name" required minlength="2" maxlength="16" /></td>
+            </tr>
+            <tr>
+                <td>День народження</td>
+                <td><input type="number" name="DateDay" value="@day" required /></td>
+                <td>Місяць народження</td>
+                <td><input type="number" name="DateMonth" value="@month" required /></td>
+                <td>Рік народження</td>
+                <td><input type="number" name="DateYear" value="@year" required /></td>
+            </tr>
+            <tr>
+                <td>Одружений\Одружена(true/false для зміни)</td>
+                @if (married == false)
+                {
+                    <td><input type="text" name="Married" value="Ні" required /></td>
+                }
+                else
+                {
+                    <td><input type="text" name="Married" value="Так" required /></td>
+                }
+            </tr>
+            <tr>
+                <td>Телефон</td>
+                <td><input type="text" name="Phone" value="@phone" required /></td>
+            </tr>
+            <tr>
+                <td>Заробітня плата</td>
+                <td><input type="text" name="Salary" value="@salary" required /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Зберегти" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<p><a href="~/">На головну</a></p>
+
+

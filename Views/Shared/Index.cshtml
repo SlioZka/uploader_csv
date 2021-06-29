@@ -1,0 +1,109 @@
+﻿@model IEnumerable<testBits.Models.CSV>
+@{
+
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Список інформації</title>
+    <style>
+        .table_sort table {
+            border-collapse: collapse;
+        }
+
+        .table_sort th {
+            color: #ffebcd;
+            background: #008b8b;
+            cursor: pointer;
+        }
+
+        .table_sort td,
+        .table_sort th {
+            width: 150px;
+            height: 40px;
+            text-align: center;
+            border: 2px solid #846868;
+        }
+
+        .table_sort tbody tr:nth-child(even) {
+            background: #e3e3e3;
+        }
+
+        th.sorted[data-order="1"],
+        th.sorted[data-order="-1"] {
+            position: relative;
+        }
+
+        th.sorted[data-order="1"]::after,
+        th.sorted[data-order="-1"]::after {
+            right: 8px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+    <h3>Інформація</h3>
+    <div>
+        <a href="~/Home/Create">Додати нового користувача</a>
+    </div>
+    <table class="table_sort">
+        <thead>
+            <tr>
+                <td>Ім'я</td>
+                <td>Дата народження</td>
+                <td>Одружений\одружена</td>
+                <td>Телефон</td>
+                <td>Заробітня плата</td>
+            
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var CSVInfo in Model)
+        {
+            <tr>
+                <td>@CSVInfo.Name</td>
+                <td>@CSVInfo.DateDay.@CSVInfo.DateMonth.@CSVInfo.DateYear</td>
+                @if (CSVInfo.Married == false)
+                {
+                    <td>Ні</td>
+                }
+                else
+                {
+                    <td>Так</td>
+                }
+                <td>@CSVInfo.Phone</td>
+                <td>@CSVInfo.Salary</td>
+                <td><a href="~/Home/Edit/@CSVInfo.Id">Змінити</a></td>
+                <td>@Html.ActionLink("Видалити", "Delete", new { id = CSVInfo.Id })</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const getSort = ({ target }) => {
+        const order = (target.dataset.order = -(target.dataset.order || -1));
+        const index = [...target.parentNode.cells].indexOf(target);
+        const collator = new Intl.Collator(['en', 'ua'], { numeric: true });
+        const comparator = (index, order) => (a, b) => order * collator.compare(
+            a.children[index].innerHTML,
+            b.children[index].innerHTML
+        );
+
+        for(const tBody of target.closest('table').tBodies)
+            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+
+        for(const cell of target.parentNode.cells)
+            cell.classList.toggle('sorted', cell === target);
+    };
+
+    document.querySelectorAll('.table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
+
+});
+</script>
